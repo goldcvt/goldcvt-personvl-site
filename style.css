@@ -129,7 +129,11 @@ body {
         background-size: cover;
         background-position: center center;
         height: 100vh;
+        /* So that flex won't shrink it. Fles-shrink itself isn't enough */
         min-width: 100vw;
+         /* Minimal padding-top of progress bar height + y-axis margins */
+        padding-top: 1rem;
+        z-index: -10;
     }
 
     button {
@@ -139,5 +143,32 @@ body {
 
     .container .controls {
         display: none;
+    }
+
+    .progress-bar {
+        display: flex;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        margin-top: .5rem;
+        position: static;
+        z-index: 10;
+    }
+
+    .progress-bar-inner {
+        display: grid;
+        width: 90%;
+        height: 100%;
+        grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+        z-index: inherit;
+    }
+
+    .progress-section {
+        border-radius: 80px;
+        margin: 0 .05rem;
+        background-color: #7A7A7A;
+        height: .25rem;
+        z-index: inherit;
+        /* animation: background-size 8s linear 0s infinite alternate; */
     }
 }
