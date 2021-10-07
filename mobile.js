@@ -9,7 +9,7 @@ let currentSlideIndex = 0
 const moveSlides = (direction) => {
     if (direction === 'left') {
         if (currentSlideIndex === 0) {
-            currentSlideIndex = (numberOfSlides-1)
+            currentSlideIndex = (numberOfSlides - 1)
         } else {
             currentSlideIndex--
         }
@@ -25,7 +25,7 @@ const moveSlides = (direction) => {
 
 const bleach = (progress, element) => {
     element.style.width = progress * 100 + '%'
-    
+
 }
 
 const animate = ({duration, draw, timing, element}) => {
@@ -42,7 +42,7 @@ const animate = ({duration, draw, timing, element}) => {
         let progress = timing(timeFraction)
 
         draw(progress, element);
-        
+
         if (timeFraction < 1) {
             requestAnimationFrame(animate);
         }
@@ -56,16 +56,21 @@ const animate = ({duration, draw, timing, element}) => {
 const nextSlide = () => {
     let timeout = 6000
     let currentSection = pBarSections[currentSlideIndex]
-    
+
     // TODO sync a video duration to timeout. Probably via custom prop "video-length" in a slide element
     if (slides[currentSlideIndex].classList.contains('video')) {
         timeout = 1000
     }
 
-    animate({duration: timeout, draw: bleach, timing: (timeFraction) => timeFraction, element: currentSection.firstChild})
+    animate({
+        duration: timeout,
+        draw: bleach,
+        timing: (timeFraction) => timeFraction,
+        element: currentSection.firstChild
+    })
 
     if (currentSlideIndex < numberOfSlides - 1) {
-        
+
         setTimeout(() => {
             moveSlides('right')
             nextSlide()

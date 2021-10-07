@@ -11,7 +11,7 @@ let currentSlideIndex = 0
 const moveSlides = (direction) => {
     if (direction === 'up') {
         if (currentSlideIndex === 0) {
-            currentSlideIndex = (numberOfSlides-1)
+            currentSlideIndex = (numberOfSlides - 1)
         } else {
             currentSlideIndex--
         }
