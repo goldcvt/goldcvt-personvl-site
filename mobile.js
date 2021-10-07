@@ -8,18 +8,24 @@ const numberOfSlides = mainSlide.childElementCount
 const slides = document.querySelectorAll('.slide')
 const screenWidth = document.querySelector('.container').clientWidth
 let currentSlideIndex = 0
-let animationFrameId = undefined
-let interval = undefined
+let animationFrameIds = []
+let interval = null
 
 const moveSlides = (direction) => {
     // TODO clear all animations
-    // if (animationFrameId) {
-    //     cancelAnimationFrame(animationFrameId)
-    // }
-    // // TODO clear interval
-    // console.log(interval)
-    // if (interval) clearTimeout(interval)
-    // console.log(interval)
+    if (animationFrameIds.length !== 0) {
+        console.log(animationFrameIds)
+        animationFrameIds.forEach(id => {
+            cancelAnimationFrame(id)
+            animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
+        })
+        console.log(animationFrameIds)
+    }
+    
+    if (interval) {
+        clearTimeout(interval)
+        interval = null
+    }
     
     if (direction === 'left') {
         if (currentSlideIndex !== 0) {
@@ -32,10 +38,10 @@ const moveSlides = (direction) => {
     }
     
     mainSlide.style.transform = `translateX(-${currentSlideIndex * screenWidth + 0.5}px)`
-    assureRestProgressSections(currentSlideIndex)
     console.log(currentSlideIndex)
     // TODO set new animateCurrent
-    // animateCurrent()
+    animateCurrent()
+    assureRestProgressSections(currentSlideIndex)
     
 }
 
@@ -49,16 +55,16 @@ const animateCurrent = () => {
     }
     
     
-    // animate({
-    //     duration: animationDuration,
-    //     draw: bleach,
-    //     timing: (timeFraction) => timeFraction,
-    //     element: element
-    // })
+    animate({
+        duration: animationDuration,
+        draw: bleach,
+        timing: (timeFraction) => timeFraction,
+        element: element
+    })
     
 
     // Timing trigger
-    if (currentSlideIndex < numberOfSlides - 1) {
+    if (currentSlideIndex < numberOfSlides - 1 && !interval) {
         interval = setTimeout(() => {
             moveSlides('right')
             animateCurrent()
@@ -90,11 +96,10 @@ const assureRestProgressSections = (currentIndex) => {
 }
 
 const animate = ({duration, draw, timing, element}) => {
-    let myHandle;
     let start = performance.now();
     function animate(time) {
         let timeFraction = (time - start) / duration;
-        if (timeFraction > 1) timeFraction = 1;
+        if (timeFraction > 1) timeFraction = 1
 
         let progress = timing(timeFraction)
 
@@ -102,17 +107,15 @@ const animate = ({duration, draw, timing, element}) => {
 
         // this thing's unstoppable...
         if (timeFraction < 1) {
-            myHandle = requestAnimationFrame(animate);
+            animationFrameIds.push(requestAnimationFrame(animate))
         }
     }
-    myHandle = requestAnimationFrame(animate)
-    animationFrameId = myHandle
+    animationFrameIds.push(requestAnimationFrame(animate))
 }
 
 // Kinda sus, we're on mobile, there's no keys...
 // TODO add section skip handler
 document.addEventListener('keydown', (event) => {
-    console.log(event)
     if (event.key === 'ArrowLeft') {
         moveSlides('left')
     } else if (event.key === 'ArrowRight') {
