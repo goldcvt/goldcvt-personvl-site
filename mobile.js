@@ -28,6 +28,7 @@ const moveSlides = (direction) => {
     
     if (controllableTimer) {
         // TODO ANCHOR
+        // Use clearAll? Probable bug if restrain
         controllableTimer.clear(controllableTimer.timerId)
         controllableTimer = null
     }
@@ -58,6 +59,14 @@ const moveSlides = (direction) => {
     animateCurrent()
     assureRestProgressSections(currentSlideIndex)
     console.log(currentSlideIndex)
+}
+
+const pause = () => {
+    controllableTimer ? controllableTimer.pause() : null
+}
+
+const resume = () => {
+    controllableTimer ? controllableTimer.resume() : null
 }
 
 const animateCurrent = () => {
