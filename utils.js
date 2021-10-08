@@ -4,6 +4,18 @@ const parseTime = (timeString) => {
     })
 }
 
+const onBackgroundLoad = (element, callback) => {
+    if (!element.classList.contains('video')) {
+        let url = element.style.backgroundImage.match(/\((.*?)\)/)[1].replace(/('|")/g,'')
+
+        let img = new Image()
+        img.onload = callback
+        img.src = url
+    } else {
+        
+    }
+}
+
 // Shotouts to Tim Down from SO
 class Timer {
     constructor(callback, delay) {
