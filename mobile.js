@@ -12,18 +12,14 @@ let animationFrameIds = []
 let tapsLeft = false
 let tapsRight = false
 
-// TODO ANCHOR
 let controllableTimer = null
 
 const moveSlides = (direction) => {
-    // clear all animations
     if (animationFrameIds.length !== 0) {
-        // console.log(animationFrameIds)
         animationFrameIds.forEach(id => {
             cancelAnimationFrame(id)
             animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
         })
-        // console.log(animationFrameIds)
     }
     
     if (controllableTimer) {
@@ -58,7 +54,6 @@ const moveSlides = (direction) => {
     
     animateCurrent()
     assureRestProgressSections(currentSlideIndex)
-    console.log(currentSlideIndex)
 }
 
 const pause = () => {
@@ -136,7 +131,6 @@ const animate = ({duration, draw, timing, element}) => {
 
         draw(progress, element);
 
-        // this thing's unstoppable...
         if (timeFraction < 1) {
             animationFrameIds.push(requestAnimationFrame(animate))
         }
@@ -144,13 +138,11 @@ const animate = ({duration, draw, timing, element}) => {
     animationFrameIds.push(requestAnimationFrame(animate))
 }
 
-// Kinda sus, we're on mobile, there's no keys...
-// TODO add section skip handler
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-        moveSlides('left')
-    } else if (event.key === 'ArrowRight') {
+mainSlide.addEventListener('click', (event) => {
+    if (2*event.clientX >= screenWidth) {
         moveSlides('right')
+    } else {
+        moveSlides('left')
     }
 })
 
