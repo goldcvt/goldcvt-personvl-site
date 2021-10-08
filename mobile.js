@@ -11,6 +11,9 @@ let currentSlideIndex = 0
 let animationFrameIds = []
 let tapsLeft = false
 let tapsRight = false
+let animationStopped = false
+let stoppedAt
+let startedAt
 
 // TODO ANCHOR
 let controllableTimer = null
@@ -58,7 +61,6 @@ const moveSlides = (direction) => {
     
     animateCurrent()
     assureRestProgressSections(currentSlideIndex)
-    console.log(currentSlideIndex)
 }
 
 const pause = () => {
@@ -67,6 +69,33 @@ const pause = () => {
 
 const resume = () => {
     controllableTimer ? controllableTimer.resume() : null
+}
+
+// twitchy as fuck for some reason, should deprecate tbh
+const toggleAnimationActive = () => {
+    animationStopped = !animationStopped
+    
+    
+    if (!animationStopped) {
+        let animationDuration
+        if (slides[currentSlideIndex].classList.contains('video')) {
+            animationDuration = parseTime(slides[currentSlideIndex].getAttribute('video-duration')) * 1000
+        } else {
+            animationDuration = DEFAULT_ANIMATION_DURATION
+        }
+        animate({
+            duration: animationDuration - (stoppedAt - startedAt),
+            draw: bleach,
+            timing: timeFraction => {
+                if (timeFraction >= (stoppedAt - startedAt) / animationDuration) {
+                    return timeFraction
+                } else {
+                    return (stoppedAt - startedAt) / animationDuration
+                }
+            },
+            element: pBarProgressMasks[currentSlideIndex]
+        })
+    }
 }
 
 const animateCurrent = () => {
@@ -127,16 +156,20 @@ const assureRestProgressSections = (currentIndex) => {
 }
 
 const animate = ({duration, draw, timing, element}) => {
-    let start = performance.now();
+    let start = performance.now()
+    
     function animate(time) {
+        stoppedAt = time
         let timeFraction = (time - start) / duration;
         if (timeFraction > 1) timeFraction = 1
 
         let progress = timing(timeFraction)
 
         draw(progress, element);
-
-        // this thing's unstoppable...
+        if (animationStopped) {
+            startedAt = start
+            return
+        }
         if (timeFraction < 1) {
             animationFrameIds.push(requestAnimationFrame(animate))
         }
@@ -151,6 +184,28 @@ document.addEventListener('keydown', (event) => {
         moveSlides('left')
     } else if (event.key === 'ArrowRight') {
         moveSlides('right')
+    }
+})
+
+document.addEventListener('keydown', (event) => {
+    console.log('keydown')
+    if (event.key !== 'ArrowLeft' || event.key !== 'ArrowRight') {
+        if (!animationStopped) {
+            pause()
+            toggleAnimationActive()
+            console.log(stoppedAt, startedAt)
+        }
+    }
+})
+
+document.addEventListener('keyup', (event) => {
+    console.log('keyup')
+    if (event.key !== 'ArrowLeft' || event.key !== 'ArrowRight') {
+        if (animationStopped) {
+            resume()
+            toggleAnimationActive()
+            console.log(stoppedAt, startedAt)
+        }
     }
 })
 
