@@ -9,40 +9,55 @@ const slides = document.querySelectorAll('.slide')
 const screenWidth = document.querySelector('.container').clientWidth
 let currentSlideIndex = 0
 let animationFrameIds = []
-let interval = null
+let tapsLeft = false
+let tapsRight = false
+
+// TODO ANCHOR
+let controllableTimer = null
 
 const moveSlides = (direction) => {
-    // TODO clear all animations
+    // clear all animations
     if (animationFrameIds.length !== 0) {
-        console.log(animationFrameIds)
+        // console.log(animationFrameIds)
         animationFrameIds.forEach(id => {
             cancelAnimationFrame(id)
             animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
         })
-        console.log(animationFrameIds)
+        // console.log(animationFrameIds)
     }
     
-    if (interval) {
-        clearTimeout(interval)
-        interval = null
+    if (controllableTimer) {
+        // TODO ANCHOR
+        controllableTimer.clear(controllableTimer.timerId)
+        controllableTimer = null
     }
     
     if (direction === 'left') {
-        if (currentSlideIndex !== 0) {
-            currentSlideIndex--
+        if (!tapsLeft) {
+            tapsLeft = true
+        } else {
+            if (currentSlideIndex !== 0 && currentSlideIndex !== numberOfSlides - 1) {
+                currentSlideIndex--
+            } else if (currentSlideIndex === numberOfSlides - 1) {
+                tapsRight = false
+                currentSlideIndex--
+            }
+            tapsLeft = false
         }
     } else if (direction === 'right') {
         if (currentSlideIndex < numberOfSlides - 1) {
             currentSlideIndex++
+        } else {
+            tapsRight = true
         }
     }
+
     
     mainSlide.style.transform = `translateX(-${currentSlideIndex * screenWidth + 0.5}px)`
-    console.log(currentSlideIndex)
-    // TODO set new animateCurrent
+    
     animateCurrent()
     assureRestProgressSections(currentSlideIndex)
-    
+    console.log(currentSlideIndex)
 }
 
 const animateCurrent = () => {
@@ -64,17 +79,15 @@ const animateCurrent = () => {
     
 
     // Timing trigger
-    if (currentSlideIndex < numberOfSlides - 1 && !interval) {
-        interval = setTimeout(() => {
+    if (currentSlideIndex < numberOfSlides - 1 && !controllableTimer) {
+        // TODO ANCHOR
+        controllableTimer = new Timer(() => {
             moveSlides('right')
             animateCurrent()
         }, animationDuration)
     }
 }
 
-// LOGIC
-// Если я на индексе Х, то этот индекс закрашивать понемногу (анимация только тут), предыдущие целиком мгновенно, 
-// а следующие наоборот в черный
 
 const darken = (progress, element) => {
     element.style.width = 0 + '%'
@@ -85,14 +98,23 @@ const bleach = (progress, element) => {
 }
 
 const assureRestProgressSections = (currentIndex) => {
-    pBarProgressMasks.forEach((element, index) => {
-        if (index < currentIndex) {
-            bleach(1, element)
-        // current index getting darkened too bc we want to clear it when moving to the left
-        } else {
-            darken(1, element)
-        }
-    })
+    if (!tapsRight) {
+        pBarProgressMasks.forEach((element, index) => {
+            if (index < currentIndex) {
+                bleach(1, element)
+            // current index getting darkened too bc we want to clear it when moving to the left
+            } else {
+                darken(1, element)
+            }
+        })
+    } else {
+        pBarProgressMasks.forEach(element => bleach(1, element))
+        animationFrameIds.forEach(id => {
+            cancelAnimationFrame(id)
+            animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
+        })
+        tapsRight = false
+    }
 }
 
 const animate = ({duration, draw, timing, element}) => {
