@@ -11,6 +11,7 @@ let currentSlideIndex = 0
 let animationFrameIds = []
 let tapsLeft = false
 let tapsRight = false
+let wait = false
 
 let controllableTimer = null
 
@@ -65,6 +66,10 @@ const resume = () => {
 }
 
 const animateCurrent = () => {
+    if (controllableTimer && !wait) {
+        controllableTimer.pause()
+        wait = true
+    }
     let element = pBarSections[currentSlideIndex].children[0]
 
     let animationDuration = DEFAULT_ANIMATION_DURATION
@@ -74,7 +79,7 @@ const animateCurrent = () => {
     }
     
     
-    animate({
+    !wait && animate({
         duration: animationDuration,
         draw: bleach,
         timing: (timeFraction) => timeFraction,
@@ -148,4 +153,12 @@ mainSlide.addEventListener('click', (event) => {
 
 // actually, should wait for load this div's content
 // TODO add such a behaviour
-animateCurrent()
+
+
+slides.forEach((slide, index) => {
+    onBackgroundLoad(slide, () => {
+        if (index === 0) animateCurrent()
+        wait = false
+        controllableTimer.resume()
+    })
+})
