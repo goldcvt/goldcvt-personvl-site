@@ -11,7 +11,7 @@ let currentSlideIndex = 0
 const moveSlides = (direction) => {
     if (direction === 'up') {
         if (currentSlideIndex === 0) {
-            currentSlideIndex = (numberOfSlides - 1)
+            currentSlideIndex = numberOfSlides - 1
         } else {
             currentSlideIndex--
         }
@@ -26,7 +26,7 @@ const moveSlides = (direction) => {
     sidebar.style.transform = `translateY(${currentSlideIndex * screenHeight}px)`
 }
 
-sidebar.style.top = `${(1-numberOfSlides)*100}vh`
+sidebar.style.top = `${(1 - numberOfSlides) * 100}vh`
 
 upButton.addEventListener('click', () => moveSlides('up'))
 downButton.addEventListener('click', () => moveSlides('down'))

@@ -16,19 +16,19 @@ let controllableTimer = null
 
 const moveSlides = (direction) => {
     if (animationFrameIds.length !== 0) {
-        animationFrameIds.forEach(id => {
+        animationFrameIds.forEach((id) => {
             cancelAnimationFrame(id)
-            animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
+            animationFrameIds = animationFrameIds.filter((idEl) => idEl !== id)
         })
     }
-    
+
     if (controllableTimer) {
         // TODO ANCHOR
         // Use clearAll? Probable bug if restrain
         controllableTimer.clear(controllableTimer.timerId)
         controllableTimer = null
     }
-    
+
     if (direction === 'left') {
         if (!tapsLeft) {
             tapsLeft = true
@@ -49,9 +49,8 @@ const moveSlides = (direction) => {
         }
     }
 
-    
     mainSlide.style.transform = `translateX(-${currentSlideIndex * screenWidth + 0.5}px)`
-    
+
     animateCurrent()
     assureRestProgressSections(currentSlideIndex)
 }
@@ -68,19 +67,18 @@ const animateCurrent = () => {
     let element = pBarSections[currentSlideIndex].children[0]
 
     let animationDuration = DEFAULT_ANIMATION_DURATION
-    
+
     if (slides[currentSlideIndex].classList.contains('video')) {
-        animationDuration = parseTime(slides[currentSlideIndex].getAttribute('video-duration')) * 1000
+        animationDuration =
+            parseTime(slides[currentSlideIndex].getAttribute('video-duration')) * 1000
     }
-    
-    
+
     animate({
         duration: animationDuration,
         draw: bleach,
         timing: (timeFraction) => timeFraction,
-        element: element
+        element: element,
     })
-    
 
     // Timing trigger
     if (currentSlideIndex < numberOfSlides - 1 && !controllableTimer) {
@@ -91,7 +89,6 @@ const animateCurrent = () => {
         }, animationDuration)
     }
 }
-
 
 const darken = (progress, element) => {
     element.style.width = 0 + '%'
@@ -106,30 +103,30 @@ const assureRestProgressSections = (currentIndex) => {
         pBarProgressMasks.forEach((element, index) => {
             if (index < currentIndex) {
                 bleach(1, element)
-            // current index getting darkened too bc we want to clear it when moving to the left
+                // current index getting darkened too bc we want to clear it when moving to the left
             } else {
                 darken(1, element)
             }
         })
     } else {
-        pBarProgressMasks.forEach(element => bleach(1, element))
-        animationFrameIds.forEach(id => {
+        pBarProgressMasks.forEach((element) => bleach(1, element))
+        animationFrameIds.forEach((id) => {
             cancelAnimationFrame(id)
-            animationFrameIds = animationFrameIds.filter(idEl => idEl !== id)
+            animationFrameIds = animationFrameIds.filter((idEl) => idEl !== id)
         })
         tapsRight = false
     }
 }
 
-const animate = ({duration, draw, timing, element}) => {
-    let start = performance.now();
+const animate = ({ duration, draw, timing, element }) => {
+    let start = performance.now()
     function animate(time) {
-        let timeFraction = (time - start) / duration;
+        let timeFraction = (time - start) / duration
         if (timeFraction > 1) timeFraction = 1
 
         let progress = timing(timeFraction)
 
-        draw(progress, element);
+        draw(progress, element)
 
         if (timeFraction < 1) {
             animationFrameIds.push(requestAnimationFrame(animate))
@@ -139,7 +136,7 @@ const animate = ({duration, draw, timing, element}) => {
 }
 
 mainSlide.addEventListener('click', (event) => {
-    if (2*event.clientX >= screenWidth) {
+    if (2 * event.clientX >= screenWidth) {
         moveSlides('right')
     } else {
         moveSlides('left')

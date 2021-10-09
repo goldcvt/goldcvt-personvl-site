@@ -6,13 +6,12 @@ const parseTime = (timeString) => {
 
 const onBackgroundLoad = (element, callback) => {
     if (!element.classList.contains('video')) {
-        let url = element.style.backgroundImage.match(/\((.*?)\)/)[1].replace(/('|")/g,'')
+        let url = element.style.backgroundImage.match(/\((.*?)\)/)[1].replace(/('|")/g, '')
 
         let img = new Image()
         img.onload = callback
         img.src = url
     } else {
-        
     }
 }
 
@@ -22,26 +21,26 @@ class Timer {
         this.callback = callback
         this.timerId = undefined
         this.start = undefined
-        this.remaining = delay;
+        this.remaining = delay
 
-        this.resume();
+        this.resume()
     }
 
     pause() {
         //clearTimeout(this.timerId)
         this.clear()
-        
-        this.remaining -= Date.now() - this.start;
+
+        this.remaining -= Date.now() - this.start
     }
 
     resume() {
         //console.log("Will resume timers:", Timer.timers)
-        this.start = Date.now();
+        this.start = Date.now()
 
         // clearTimeout(this.timerId);
         this.clear()
 
-        this.timerId = setTimeout(this.callback, this.remaining);
+        this.timerId = setTimeout(this.callback, this.remaining)
         Timer.timers.push(this.timerId)
 
         //console.log("Resumed, timers:", Timer.timers)
@@ -49,7 +48,7 @@ class Timer {
 
     clearAll() {
         // console.log("Will clear all:", Timer.timers)
-        Timer.timers.forEach(timerId => {
+        Timer.timers.forEach((timerId) => {
             clearTimeout(timerId)
         })
         Timer.timers = []
@@ -59,7 +58,7 @@ class Timer {
     clear() {
         // console.log(`Will clear ${this.timerId}`, Timer.timers)
         clearTimeout(this.timerId)
-        Timer.timers = Timer.timers.filter(id => id !== this.timerId)
+        Timer.timers = Timer.timers.filter((id) => id !== this.timerId)
         // console.log("Cleared one", Timer.timers)
     }
 }
