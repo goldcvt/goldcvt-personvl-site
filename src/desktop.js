@@ -26,15 +26,18 @@ const moveSlides = (direction) => {
     sidebar.style.transform = `translateY(${currentSlideIndex * screenHeight}px)`
 }
 
-sidebar.style.top = `${(1 - numberOfSlides) * 100}vh`
+// if __name__ == "__main__"
+if (screen && screen.width > 600) {
+    sidebar.style.top = `${(1 - numberOfSlides) * 100}vh`
 
-upButton.addEventListener('click', () => moveSlides('up'))
-downButton.addEventListener('click', () => moveSlides('down'))
+    upButton.addEventListener('click', () => moveSlides('up'))
+    downButton.addEventListener('click', () => moveSlides('down'))
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowUp') {
-        moveSlides('up')
-    } else if (event.key === 'ArrowDown') {
-        moveSlides('down')
-    }
-})
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp') {
+            moveSlides('up')
+        } else if (event.key === 'ArrowDown') {
+            moveSlides('down')
+        }
+    })
+}
