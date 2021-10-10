@@ -1,22 +1,42 @@
-const parseTime = (timeString) => {
+export const parseTime = (timeString) => {
     return timeString.split(':').reduce((prev, cur) => {
         return parseInt(prev) * 60 + parseInt(cur)
     })
 }
 
-const onBackgroundLoad = (element, callback) => {
+export const onBackgroundLoad = (element, callback) => {
+    let url
     if (!element.classList.contains('video')) {
-        let url = element.style.backgroundImage.match(/\((.*?)\)/)[1].replace(/('|")/g, '')
-
+        try {
+            url = window
+                .getComputedStyle(element, false)
+                .backgroundImage.match(/\((.*?)\)/)[1]
+                .replace(/('|")/g, '')
+        } catch (e) {
+            callback()
+            return
+        }
         let img = new Image()
         img.onload = callback
         img.src = url
     } else {
+        callback()
+        // const videoSource = element.querySelector('video source')
+        // url = videoSource.getAttribute('src')
+        // try {
+        //     let video = document.createElement('video')
+        //     video.onload = () => {
+        //         callback()
+        //     }
+        //     video.src = url
+        // } catch (e) {
+        //     callback()
+        // }
     }
 }
 
 // Shotouts to Tim Down from SO
-class Timer {
+export class Timer {
     constructor(callback, delay) {
         this.callback = callback
         this.timerId = undefined
