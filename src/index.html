@@ -3,9 +3,12 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet"
+          href="style.css" />
     <title>Pick Your Music | Проект 3</title>
 </head>
 
@@ -46,26 +49,35 @@
             </div>
         </div>
         <div class="main-slide">
-            <div class="slide" style="
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Chrysomallon_squamiferum_2.png');
-            ">
+            <div class="slide"
+                 id="slide1">
                 <h1 style="color: white">11111</h1>
                 <p style="color: white">COntent!! Wow, so much content you wouldn't believe!</p>
                 <div style="width: 10px; height: 10px; background-color: red"></div>
             </div>
-            <div class="slide video" style="
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Brachypelma_smithi_2009_G09.jpg/1280px-Brachypelma_smithi_2009_G09.jpg');
-            " video-duration="00:02">
-                <h1>2</h1>
+            <div class="slide video"
+                 id="slide2"
+                 video-duration="00:19">
+                <h1>
+                    <div class="video-container">
+                        <video autoplay
+                               muted
+                               loop>
+                            <source src="https://2ch.hk/b/src/255846417/16338010685390.mp4"
+                                    type="video/mp4" />
+                        </video>
+                        <div class="caption">
+                            <h2>Your caption here</h2>
+                        </div>
+                    </div>
+                </h1>
             </div>
-            <div class="slide" style="
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ed/Cape_dwarf_chameleon_%28Bradypodion_pumilum%29_male.jpg');
-            ">
+            <div class="slide"
+                 id="slide3">
                 <h1>3</h1>
             </div>
-            <div class="slide" style="
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wei%C3%9Fbrusttukan.JPG/1280px-Wei%C3%9Fbrusttukan.JPG');
-            ">
+            <div class="slide"
+                 id="slide4">
                 <h1>4</h1>
             </div>
         </div>
@@ -78,10 +90,12 @@
             </button>
         </div>
     </div>
-    <script src="utils.js"></script>
-    <!-- TODO concat scripts, desktop version is broken without desktop scripts -->
-    <!-- <script src="desktop.js"></script> -->
-    <script src="mobile.js"></script>
+    <script src="utils.js"
+            type="module"></script>
+    <script src="mobile.js"
+            type="module"></script>
+    <script src="desktop.js"
+            type="module"></script>
 </body>
 
 </html>
