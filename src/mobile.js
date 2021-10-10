@@ -1,3 +1,8 @@
+import { Timer } from './utils.js'
+Timer.timers = []
+
+import { parseTime, onBackgroundLoad } from './utils.js'
+
 const DEFAULT_ANIMATION_DURATION = 6000
 
 const mainSlide = document.querySelector('.main-slide')
@@ -23,8 +28,6 @@ const moveSlides = (direction) => {
     }
 
     if (controllableTimer) {
-        // TODO ANCHOR
-        // Use clearAll? Probable bug if restrain
         controllableTimer.clear(controllableTimer.timerId)
         controllableTimer = null
     }
@@ -42,6 +45,7 @@ const moveSlides = (direction) => {
             tapsLeft = false
         }
     } else if (direction === 'right') {
+        tapsLeft = false
         if (currentSlideIndex < numberOfSlides - 1) {
             currentSlideIndex++
         } else {
@@ -51,7 +55,7 @@ const moveSlides = (direction) => {
 
     mainSlide.style.transform = `translateX(-${currentSlideIndex * screenWidth + 0.5}px)`
 
-    animateCurrent()
+    lazyAnimateCurrent()
     assureRestProgressSections(currentSlideIndex)
 }
 
@@ -85,7 +89,6 @@ const animateCurrent = () => {
         // TODO ANCHOR
         controllableTimer = new Timer(() => {
             moveSlides('right')
-            animateCurrent()
         }, animationDuration)
     }
 }
@@ -96,6 +99,11 @@ const darken = (progress, element) => {
 
 const bleach = (progress, element) => {
     element.style.width = progress * 100 + '%'
+}
+
+const lazyAnimateCurrent = () => {
+    const myElement = slides[currentSlideIndex]
+    onBackgroundLoad(myElement, animateCurrent)
 }
 
 const assureRestProgressSections = (currentIndex) => {
@@ -135,14 +143,24 @@ const animate = ({ duration, draw, timing, element }) => {
     animationFrameIds.push(requestAnimationFrame(animate))
 }
 
-mainSlide.addEventListener('click', (event) => {
-    if (2 * event.clientX >= screenWidth) {
-        moveSlides('right')
-    } else {
-        moveSlides('left')
-    }
-})
+// if __name__ == "__main__"
+if (screen && screen.width <= 600) {
+    mainSlide.addEventListener('click', (event) => {
+        if (2 * event.clientX >= screenWidth) {
+            moveSlides('right')
+        } else {
+            moveSlides('left')
+        }
+    })
 
-// actually, should wait for load this div's content
-// TODO add such a behaviour
-animateCurrent()
+    // actually, should wait for load this div's content
+    // TODO add such a behaviour
+    lazyAnimateCurrent()
+}
+
+/* 
+    Это, по лейзи лоаду: просто в animateCurrent жди загрузки элемента до всего. 
+    Ну то есть мы сделаем функцию-обертку, lazyAnimateCurrent, 
+    в которую animateCurrent будет прилетать и запускаться коллбэком функции onBackgroundLoaded, 
+    и вызывать уже lazyAnimateCurrent везде где нужно)
+*/
