@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -10,6 +12,7 @@ body {
     height: 100vh;
     overflow: hidden;
     margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .container {
@@ -23,7 +26,16 @@ body {
 
 #controls {
     width: 50%;
-    height: 50px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#controls button {
+    height: 40px;
+    margin-right: 10px;
+    font-size: 1.1rem;
 }
 
 #board {
@@ -46,7 +58,7 @@ body {
     top: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(123, 0, 0, 0.5);
+    background-color: rgba(51, 51, 51, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,9 +66,28 @@ body {
 
 .modal {
     width: 500px;
-    height: 500px;
+    height: 250px;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+.modal p {
     color: whitesmoke;
-    background-color: rgba(123, 241, 0, 0.5);
+    max-width: 300px;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.modal button {
+    border-radius: 20px;
+    border: 0;
+    width: 180px;
+    height: 50px;
+    font-size: 1.25rem;
 }
 
 .hide {
