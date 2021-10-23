@@ -107,6 +107,7 @@ function getNotes(tiles) {
 
 function playSound(tiles) {
     const notes = getNotes(tiles)
+    synth && notes ? synth.releaseAll() : null
     notes.length !== 0 ? synth.triggerAttackRelease(notes, 1) : null
 }
 
