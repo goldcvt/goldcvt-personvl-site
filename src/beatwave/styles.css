@@ -12,10 +12,22 @@ body {
     margin: 0;
 }
 
-.container#board {
+.container {
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#controls {
+    width: 50%;
+    height: 50px;
+}
+
+#board {
+    display: flex;
     max-width: 800px;
     flex-wrap: wrap;
 }
@@ -26,4 +38,27 @@ body {
     background: #1d1d1d;
     margin: 2px;
     box-shadow: 0 0 2px #000;
+}
+
+.container-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(123, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    width: 500px;
+    height: 500px;
+    color: whitesmoke;
+    background-color: rgba(123, 241, 0, 0.5);
+}
+
+.hide {
+    display: none;
 }

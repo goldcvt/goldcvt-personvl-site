@@ -2,15 +2,35 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>Pseudo Beatwave</title>
+      <meta charset="UTF-8" />
+      <meta name="viewport"
+            content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet"
+            href="styles.css" />
+      <title>Pseudo Beatwave</title>
 </head>
 
 <body>
-    <div class="container" id="board"></div>
-    <script src="app.js"></script>
+      <div class="container">
+            <div id="controls">
+                  <button class="clear-field">Очистить</button>
+                  <button class="mute">Выключить звук</button>
+            </div>
+            <div id="board">
+
+
+            </div>
+      </div>
+      <div class="container-modal">
+            <div class="modal">
+                  <p>Hit the button to start jammin'!</p>
+                  <button>></button>
+            </div>
+      </div>
+      <script src="../../dist/main.js"
+              type="module"></script>
+      <!-- <script src="app.js"
+              type="module"></script> -->
 </body>
 
 </html>
