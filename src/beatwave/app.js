@@ -1,5 +1,9 @@
 import * as Tone from 'tone'
+import { Timer } from '../utils'
 
+Timer.timers = []
+
+let timer
 let synth
 
 const board = document.querySelector('#board')
@@ -7,6 +11,7 @@ const startButton = document.querySelector('.modal button')
 const modal = document.querySelector('.container-modal')
 const clearFieldButton = document.querySelector('.clear-field')
 const muteButton = document.querySelector('.mute')
+const pauseButton = document.querySelector('.pause')
 
 const volume = new Tone.Volume(-12).toDestination()
 
@@ -90,9 +95,18 @@ function getActiveTiles(markerPosition) {
 
 function playbackLoop(playbackMarkerPosition) {
     let newPlaybackMarkerPosition = movePlaybackMarker(playbackMarkerPosition)
-    return setTimeout(() => {
+
+    timer = new Timer(() => {
         playbackLoop(newPlaybackMarkerPosition)
     }, DELAYBETWEENCOLUMNS)
+}
+
+function pause() {
+    timer ? timer.pause() : null
+}
+
+function resume() {
+    timer ? timer.resume() : null
 }
 
 function getNotes(tiles) {
@@ -173,5 +187,14 @@ muteButton.addEventListener('click', (e) => {
     } else {
         volume.mute = false
         muteButton.textContent = 'Выключить звук'
+    }
+})
+pauseButton.addEventListener('click', (e) => {
+    if (pauseButton.innerHTML === '<i class="fas fa-pause"></i>') {
+        pause()
+        pauseButton.innerHTML = '<i class="fas fa-play"></i>'
+    } else {
+        resume()
+        pauseButton.innerHTML = '<i class="fas fa-pause"></i>'
     }
 })
